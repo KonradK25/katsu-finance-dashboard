@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { StockQuoteCard } from '@/components/stock-quote-card';
 import { StockChart } from '@/components/stock-chart';
 import { MarketUpdates } from '@/components/market-updates';
+import { SmartMoneyTracker } from '@/components/smart-money-tracker';
 import { ChatInterface } from '@/components/chat-interface';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -231,6 +232,11 @@ export default function Dashboard() {
             {/* News Feed */}
             <section>
               <MarketUpdates news={newsData} />
+            </section>
+
+            {/* Smart Money Tracker */}
+            <section>
+              <SmartMoneyTracker />
             </section>
           </div>
 
