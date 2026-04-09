@@ -17,6 +17,7 @@ interface NewsItem {
 
 interface MarketUpdatesProps {
   onNewsLoad?: (news: NewsItem[]) => void;
+  news?: NewsItem[];
 }
 
 const CATEGORIES = [

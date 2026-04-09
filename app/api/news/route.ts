@@ -28,6 +28,7 @@ interface NewsItem {
   sourceColor: string;
   sentiment_score?: number;
   image?: string;
+  category?: string;
 }
 
 // Parse RSS feed XML using fast-xml-parser
@@ -187,7 +188,20 @@ export async function GET(request: NextRequest) {
         getBEAEconomicNews()
       ]);
 
-      news = [...cnbcNews, ...bloombergNews, ...wsjNews, ...stockNews, ...fredNews, ...beaNews];
+      // Ensure all news items have required fields
+      const normalizeNews = (item: any): NewsItem => ({
+        title: item.title || 'No Title',
+        summary: item.summary || '',
+        url: item.url || '#',
+        time_published: item.time_published || new Date().toISOString(),
+        source: item.source || 'Unknown',
+        sourceColor: item.sourceColor || 'bg-gray-600',
+        category: item.category || 'General',
+        sentiment_score: item.sentiment_score
+      });
+
+      const allNews = [...cnbcNews, ...bloombergNews, ...wsjNews, ...stockNews, ...fredNews, ...beaNews];
+      news = allNews.map(normalizeNews);
       
       // Sort by time (newest first)
       news.sort((a, b) => {
