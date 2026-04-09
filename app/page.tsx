@@ -23,6 +23,21 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [reportGenerated, setReportGenerated] = useState(false);
 
+  // Fetch general financial news on page load
+  useEffect(() => {
+    async function fetchGeneralNews() {
+      try {
+        const newsRes = await fetch('/api/news');
+        const news = await newsRes.json();
+        setNewsData(news);
+      } catch (error) {
+        console.error('Error fetching general news:', error);
+      }
+    }
+
+    fetchGeneralNews();
+  }, []);
+
   // Fetch stock data when report is generated
   useEffect(() => {
     if (!reportGenerated) return;
