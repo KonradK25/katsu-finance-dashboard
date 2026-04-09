@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { StockQuoteCard } from '@/components/stock-quote-card';
 import { StockChart } from '@/components/stock-chart';
-import { NewsFeed } from '@/components/news-feed';
+import { MarketUpdates } from '@/components/market-updates';
 import { ChatInterface } from '@/components/chat-interface';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -22,21 +22,6 @@ export default function Dashboard() {
   const [newsData, setNewsData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [reportGenerated, setReportGenerated] = useState(false);
-
-  // Fetch general financial news on page load
-  useEffect(() => {
-    async function fetchGeneralNews() {
-      try {
-        const newsRes = await fetch('/api/news');
-        const news = await newsRes.json();
-        setNewsData(news);
-      } catch (error) {
-        console.error('Error fetching general news:', error);
-      }
-    }
-
-    fetchGeneralNews();
-  }, []);
 
   // Fetch stock data when report is generated
   useEffect(() => {
@@ -67,11 +52,6 @@ export default function Dashboard() {
           console.warn('Time series returned non-array:', seriesData);
           setTimeSeriesData([]);
         }
-
-        // Fetch news for selected stock
-        const newsRes = await fetch(`/api/news?symbol=${selectedStock}`);
-        const news = await newsRes.json();
-        setNewsData(news);
       } catch (error) {
         console.error('Error fetching stock data:', error);
         setTimeSeriesData([]);
@@ -250,7 +230,7 @@ export default function Dashboard() {
 
             {/* News Feed */}
             <section>
-              <NewsFeed news={newsData} />
+              <MarketUpdates news={newsData} />
             </section>
           </div>
 
