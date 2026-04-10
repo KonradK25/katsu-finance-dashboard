@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ArrowLeft, TrendingUp } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Shield } from 'lucide-react';
 import Link from 'next/link';
+import { ShortInterestTracker } from '@/components/short-interest-tracker';
 
 interface YieldCurveData {
   yields: Record<string, { value: number | null; date: string }>;
@@ -205,6 +206,11 @@ export default function TreasuryYieldCurve() {
             </div>
           </div>
         </div>
+
+        {/* Short Interest Tracker */}
+        <section>
+          <ShortInterestTracker />
+        </section>
 
         {/* Educational Info */}
         <div className="rounded-lg border bg-muted/50 p-6">
