@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, Lightbulb } from 'lucide-react';
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Bar, BarChart, ComposedChart, CartesianGrid } from 'recharts';
 import Link from 'next/link';
 
 interface CryptoData {
@@ -26,6 +26,7 @@ interface CryptoData {
 interface ChartDataPoint {
   date: string;
   price: number;
+  volume: number;
 }
 
 export default function CryptoDashboard() {
@@ -60,7 +61,8 @@ export default function CryptoDashboard() {
         const data = await res.json();
         const formatted = data.map((item: any) => ({
           date: new Date(item.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-          price: item.close
+          price: item.close,
+          volume: item.volume
         }));
         setChartData(formatted);
       } catch (error) {
@@ -222,15 +224,37 @@ export default function CryptoDashboard() {
                   </div>
                 ) : chartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={chartData}>
+                    <ComposedChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#333" opacity={0.3} />
                       <XAxis dataKey="date" stroke="#888" fontSize={12} tickLine={false} axisLine={false} />
-                      <YAxis stroke="#888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v.toLocaleString()}`} />
+                      <YAxis 
+                        yAxisId="left"
+                        stroke="#888" 
+                        fontSize={12} 
+                        tickLine={false} 
+                        axisLine={false} 
+                        tickFormatter={(v) => `$${v.toLocaleString()}`} 
+                      />
+                      <YAxis 
+                        yAxisId="right"
+                        orientation="right"
+                        stroke="#888" 
+                        fontSize={12} 
+                        tickLine={false} 
+                        axisLine={false}
+                        hide
+                      />
                       <Tooltip
                         contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: 'var(--radius)' }}
-                        formatter={(v: any) => [`$${Number(v).toLocaleString()}`, 'Price']}
+                        formatter={(v: any, name: any) => {
+                          if (name === 'Price') return [`$${Number(v).toLocaleString()}`, 'Price'];
+                          if (name === 'Volume') return [`$${(Number(v) / 1e6).toFixed(2)}M`, 'Volume'];
+                          return [v, name];
+                        }}
                       />
-                      <Line type="monotone" dataKey="price" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-                    </LineChart>
+                      <Bar yAxisId="right" dataKey="volume" fill="hsl(var(--primary))" opacity={0.3} barSize={8} />
+                      <Line yAxisId="left" type="monotone" dataKey="price" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                    </ComposedChart>
                   </ResponsiveContainer>
                 ) : (
                   <div className="h-[300px] flex items-center justify-center">
