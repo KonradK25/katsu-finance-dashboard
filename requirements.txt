@@ -1,0 +1,34 @@
+# Katsu DCF Engine - Dependencies
+
+# SEC EDGAR
+sec-edgar-downloader>=4.0.0
+
+# Yahoo Finance
+yfinance>=0.2.0
+
+# Excel generation
+openpyxl>=3.1.0
+xlsxwriter>=3.1.0
+
+# Data & HTTP
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Data handling
+pandas>=2.0.0
+numpy>=1.24.0
+
+# CLI
+click>=8.1.0
+
+# Dashboard
+streamlit>=1.30.0
+plotly>=5.18.0
+
+# Utilities
+python-dateutil>=2.8.0
+
+# Testing (optional)
+pytest>=7.4.0
+pytest-cov>=4.1.0
